@@ -10,7 +10,7 @@ module.exports = {
     'plugin:prettier/recommended',
     'plugin:jest/recommended'
   ],
-  parser: "@babel/eslint-parser",
+  parser: '@babel/eslint-parser',
   parserOptions: {
     requireConfigFile: false,
     sourceType: 'module'
@@ -29,6 +29,7 @@ module.exports = {
     require: false,
     requirejs: false
   },
+  ignorePatterns: ['packages/web-integration-oc10/js'],
   plugins: ['jest'],
   overrides: [
     {
