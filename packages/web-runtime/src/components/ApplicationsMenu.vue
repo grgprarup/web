@@ -22,7 +22,13 @@
     >
       <ul class="uk-grid-small uk-text-center" uk-grid>
         <li v-for="(n, nid) in menuItems" :key="`apps-menu-${nid}`" class="uk-width-1-3">
-          <a v-if="n.url" key="apps-menu-external-link" :target="n.target" :href="n.url">
+          <a
+            v-if="n.url"
+            key="apps-menu-external-link"
+            :target="n.target"
+            :href="n.url"
+            @click="clickApp(n)"
+          >
             <oc-icon :name="n.iconMaterial" size="xlarge" />
             <span class="uk-display-block" v-text="$gettext(n.title)" />
           </a>
@@ -39,6 +45,7 @@
 <script>
 import NavigationMixin from '../mixins/navigationMixin'
 import UiKit from 'uikit'
+import { mapGetters } from 'vuex'
 
 export default {
   mixins: [NavigationMixin],
@@ -50,6 +57,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['configuration', 'getToken']),
     menuItems() {
       return this.navigation_getMenuItems([null, 'apps', 'appSwitcher'])
     },
@@ -84,6 +92,27 @@ export default {
     },
     focusMenuButton() {
       this.$refs.menubutton.$el.focus()
+    },
+    async clickApp(appEntry) {
+      // @TODO use id or similar
+      if (appEntry.iconMaterial === 'switch_ui') {
+        await this.setClassicUIDefault()
+      }
+    },
+    setClassicUIDefault() {
+      const endpoint = new URL(this.configuration.server || window.location.origin)
+      endpoint.pathname =
+        endpoint.pathname.replace(/\/$/, '') + '/index.php/apps/web/settings/default'
+
+      const headers = new Headers()
+      headers.append('Authorization', 'Bearer ' + this.getToken)
+      headers.append('X-Requested-With', 'XMLHttpRequest')
+
+      return fetch(endpoint.href, {
+        headers,
+        method: 'POST',
+        body: JSON.stringify({ isDefault: false })
+      })
     }
   }
 }
