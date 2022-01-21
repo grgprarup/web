@@ -3,6 +3,7 @@ import path from 'path'
 import { DateTime } from 'luxon'
 
 import fileIconMappings from '../fileTypeIconMappings.json'
+import fileIconColorMappings from '../fileTypeColorMappings.json'
 import { getIndicators } from './statusIndicators'
 import { $gettext } from '../gettext'
 import { DavPermission, DavProperty } from 'web-pkg/src/constants'
@@ -17,6 +18,16 @@ export function getFileIcon(extension) {
   }
 
   return 'file'
+}
+
+export function getFileIconColor(extension) {
+  const icon = fileIconColorMappings[extension.toLowerCase()]
+
+  if (icon) {
+    return icon
+  }
+
+  return '#DADCDF'
 }
 
 function _getFileExtension(name) {
@@ -46,6 +57,7 @@ export function buildResource(resource) {
     fileId: resource.fileInfo[DavProperty.FileId],
     mimeType: resource.fileInfo[DavProperty.MimeType],
     icon: isFolder ? 'folder' : getFileIcon(extension),
+    iconColor: isFolder ? getFileIconColor('folder') : getFileIconColor(extension),
     name: path.basename(resource.name),
     extension: isFolder ? '' : extension,
     path: resource.name,
