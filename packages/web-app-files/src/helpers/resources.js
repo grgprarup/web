@@ -11,7 +11,7 @@ import { PeopleShareRoles, SharePermissions, ShareStatus, ShareTypes } from './s
 
 // Should we move this to ODS?
 export function getFileIcon(extension) {
-  const icon = fileIconMappings[extension.toLowerCase()]
+  let icon = fileIconMappings[extension.toLowerCase()]
 
   if (icon) {
     return icon
@@ -21,10 +21,10 @@ export function getFileIcon(extension) {
 }
 
 export function getFileIconColor(extension) {
-  const icon = fileIconColorMappings[extension.toLowerCase()]
+  const color = fileIconColorMappings[extension.toLowerCase()]
 
-  if (icon) {
-    return icon
+  if (color) {
+    return color
   }
 
   return '#DADCDF'
@@ -57,7 +57,8 @@ export function buildResource(resource) {
     fileId: resource.fileInfo[DavProperty.FileId],
     mimeType: resource.fileInfo[DavProperty.MimeType],
     icon: isFolder ? 'folder' : getFileIcon(extension),
-    iconColor: isFolder ? getFileIconColor('folder') : getFileIconColor(extension),
+    iconColor: isFolder ? '#2C65FF' : getFileIconColor(extension),
+    iconFillType: 'solid',
     name: path.basename(resource.name),
     extension: isFolder ? '' : extension,
     path: resource.name,
