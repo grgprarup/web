@@ -118,7 +118,6 @@ export default {
 
     $_fileActions__routeOpts(app, filePath, fileId, mode) {
       const route = this.$route
-      const { item, ...params } = route.params
 
       return {
         name: app.routeName || app.app,
@@ -128,7 +127,7 @@ export default {
           mode,
           contextRouteName: this.$route.name
         },
-        query: convertRouteParamsToContextQuery(params)
+        query: convertRouteParamsToContextQuery(route.params)
         }
       }
     },
