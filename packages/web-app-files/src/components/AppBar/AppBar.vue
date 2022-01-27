@@ -151,6 +151,7 @@ import SizeInfo from './SelectedResources/SizeInfo.vue'
 import ViewOptions from './ViewOptions.vue'
 import { DavProperties, DavProperty } from 'web-pkg/src/constants'
 import ContextActions from '../FilesList/ContextActions.vue'
+import { isSingleProject } from '../../router/spaces'
 
 export default {
   components: {
@@ -163,17 +164,14 @@ export default {
     ContextActions
   },
   mixins: [Mixins, MixinFileActions],
-  setup() {
-    const router = useRouter()
-    return {
-      isPersonalLocation: isLocationSpacesActive(router, 'files-spaces-personal-home'),
-      isPublicLocation: isLocationPublicActive(router, 'files-public-files')
-    }
-  },
   data: () => ({
     newFileAction: null,
     path: '',
-    fileFolderCreationLoading: false
+    fileFolderCreationLoading: false,
+    isPersonalLocation: false,
+    isPublicLocation: false,
+    isSpacesProjectsLocation: false,
+    isSpacesProjectLocation: false
   }),
   computed: {
     ...mapGetters('External', ['mimeTypes']),
@@ -252,23 +250,20 @@ export default {
       return this.$gettext(title)
     },
 
-    breadcrumbs() {
-      const isProjectSpaces =
-        isLocationSpacesActive(this.$router, 'files-spaces-projects') ||
-        isLocationSpacesActive(this.$router, 'files-spaces-project')
-
-      if (!(this.isPublicLocation || this.isPersonalLocation || isProjectSpaces)) {
+    breadcrumbs: function () {
+      if (
+        !(
+          this.isPublicLocation ||
+          this.isPersonalLocation ||
+          this.isSpacesProjectsLocation ||
+          this.isSpacesProjectLocation
+        )
+      ) {
         return []
       }
 
       const { params: routeParams, path: routePath } = this.$route
-
-      let requestedItemPath = ''
-      if (isProjectSpaces) {
-        requestedItemPath = routeParams.spaceId || ''
-      } else {
-        requestedItemPath = routeParams.item || ''
-      }
+      const requestedItemPath = routeParams.item || ''
 
       const basePaths =
         '/' +
@@ -293,7 +288,7 @@ export default {
             if (acc.length) {
               if (this.isPersonalLocation) {
                 acc[0].text = this.$gettext('All files')
-              } else if (isProjectSpaces) {
+              } else if (this.isSpacesProjectLocation || this.isSpacesProjectsLocation) {
                 acc[0].text = this.$gettext('Spaces')
               } else {
                 acc[0].text = this.$gettext('Public link')
@@ -348,8 +343,16 @@ export default {
       )
     }
   },
-
+  watch: {
+    $route: {
+      handler: function () {
+        this.setActiveLocations()
+      }
+    }
+  },
   created() {
+    this.setActiveLocations()
+
     // Storage returns a string so we need to convert it into a boolean
     const areHiddenFilesShown = window.localStorage.getItem('oc_hiddenFilesShown') || 'false'
     const areHiddenFilesShownBoolean = areHiddenFilesShown === 'true'
@@ -703,6 +706,13 @@ export default {
 
     onFileProgress(progress) {
       this.updateFileProgress(progress)
+    },
+
+    setActiveLocations() {
+      this.isPersonalLocation = isLocationSpacesActive(this.$router, 'files-spaces-personal-home')
+      this.isPublicLocation = isLocationPublicActive(this.$router, 'files-public-files')
+      this.isSpacesProjectsLocation = isLocationSpacesActive(this.$router, 'files-spaces-projects')
+      this.isSpacesProjectLocation = isLocationSpacesActive(this.$router, 'files-spaces-project')
     }
   }
 }

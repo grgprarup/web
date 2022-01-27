@@ -41,6 +41,8 @@ export function renameResource(resource, newName, newPath) {
 export function buildResource(resource) {
   const isFolder = resource.type === 'dir'
   const extension = _getFileExtension(resource.name)
+  const shortenedPath = resource.name.split('/').splice(3).join('/')
+
   return {
     id: resource.fileInfo[DavProperty.FileId],
     fileId: resource.fileInfo[DavProperty.FileId],
@@ -49,6 +51,7 @@ export function buildResource(resource) {
     name: path.basename(resource.name),
     extension: isFolder ? '' : extension,
     path: resource.name,
+    shortenedPath,
     type: isFolder ? 'folder' : resource.type,
     isFolder,
     mdate: resource.fileInfo[DavProperty.LastModifiedDate],
