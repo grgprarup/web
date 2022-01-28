@@ -49,6 +49,7 @@
         :is-path-displayed="arePathsDisplayed"
         :is-thumbnail-displayed="areThumbnailsDisplayed"
         :target-route="targetRoute"
+        :folder-link="folderLink(item)"
         :is-resource-clickable="isResourceClickable(item.id)"
         @click="emitFileClick(item)"
       />
@@ -506,6 +507,28 @@ export default {
     }
   },
   methods: {
+    folderLink(file) {
+      if (this.targetRoute === null) {
+        return {}
+      }
+      const additionalParams = {}
+
+      if (this.$route.params.spaceId) {
+        additionalParams.spaceId = this.$route.params.spaceId
+      }
+
+      const path = file.path.replace(/^\//, '')
+
+      return {
+        name: this.targetRoute.name,
+        query: this.targetRoute.query,
+        params: {
+          item: path,
+          ...this.targetRoute.params,
+          ...additionalParams
+        }
+      }
+    },
     fileDragged(file) {
       this.addSelectedResource(file)
     },
