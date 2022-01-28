@@ -9,15 +9,14 @@ import { $gettext } from '../gettext'
 import { DavPermission, DavProperty } from 'web-pkg/src/constants'
 import { PeopleShareRoles, SharePermissions, ShareStatus, ShareTypes } from './share'
 
-// Should we move this to ODS?
 export function getFileIcon(extension) {
-  let icon = fileIconMappings[extension.toLowerCase()]
+  const icon = fileIconMappings[extension.toLowerCase()]
 
   if (icon) {
-    return icon
+    return `resource-type-${icon}`
   }
 
-  return 'file'
+  return 'resource-type-file'
 }
 
 export function getFileIconColor(extension) {
@@ -27,7 +26,7 @@ export function getFileIconColor(extension) {
     return color
   }
 
-  return '#DADCDF'
+  return 'var(--oc-color-text-default)'
 }
 
 function _getFileExtension(name) {
@@ -56,9 +55,8 @@ export function buildResource(resource) {
     id: resource.fileInfo[DavProperty.FileId],
     fileId: resource.fileInfo[DavProperty.FileId],
     mimeType: resource.fileInfo[DavProperty.MimeType],
-    icon: isFolder ? 'folder' : getFileIcon(extension),
+    icon: isFolder ? 'resource-type-folder' : getFileIcon(extension),
     iconColor: isFolder ? '#2C65FF' : getFileIconColor(extension),
-    iconFillType: 'solid',
     name: path.basename(resource.name),
     extension: isFolder ? '' : extension,
     path: resource.name,
