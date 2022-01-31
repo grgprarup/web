@@ -134,7 +134,6 @@
 <script>
 import { mapActions, mapGetters, mapState, mapMutations } from 'vuex'
 import pathUtil from 'path'
-import { useRouter } from 'web-pkg/src/composables'
 import get from 'lodash-es/get'
 
 import Mixins from '../../mixins'
@@ -294,7 +293,7 @@ export default {
                 if (this.$route.params.spaceId) {
                   acc.splice(1, 0, {
                     text: this.$route.params.spaceId,
-                    to: `/files/spaces/projects/${this.$route.params.spaceId}`,
+                    to: `/files/spaces/projects/${this.$route.params.spaceId}`
                   })
                 }
               } else {
