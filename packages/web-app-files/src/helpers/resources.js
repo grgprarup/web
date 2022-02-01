@@ -32,8 +32,6 @@ export function buildResource(resource) {
     id: resource.fileInfo[DavProperty.FileId],
     fileId: resource.fileInfo[DavProperty.FileId],
     mimeType: resource.fileInfo[DavProperty.MimeType],
-    icon: isFolder ? 'resource-type-folder' : getFileIcon(extension),
-    iconColor: isFolder ? '#2C65FF' : getFileIconColor(extension),
     name: path.basename(resource.name),
     extension: isFolder ? '' : extension,
     path: resource.name,
@@ -211,7 +209,6 @@ export function buildSharedResource(share, incomingShares = false, allowSharePer
   }
 
   resource.extension = isFolder ? '' : _getFileExtension(resource.name)
-  resource.icon = isFolder ? 'folder' : getFileIcon(resource.extension)
   resource.isReceivedShare = () => incomingShares
   resource.canUpload = () => true
   resource.isMounted = () => false
@@ -336,7 +333,6 @@ export function buildDeletedResource(resource) {
     extension,
     path: resource.fileInfo[DavProperty.TrashbinOriginalLocation],
     id: path.basename(resource.name),
-    icon: isFolder ? 'folder' : getFileIcon(extension),
     indicators: [],
     canUpload: () => false,
     canDownload: () => false,
