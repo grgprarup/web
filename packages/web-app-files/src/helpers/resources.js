@@ -1,33 +1,10 @@
 import orderBy from 'lodash-es/orderBy'
 import path from 'path'
 import { DateTime } from 'luxon'
-
-import fileIconMappings from '../fileTypeIconMappings.json'
-import fileIconColorMappings from '../fileTypeColorMappings.json'
 import { getIndicators } from './statusIndicators'
 import { $gettext } from '../gettext'
 import { DavPermission, DavProperty } from 'web-pkg/src/constants'
 import { PeopleShareRoles, SharePermissions, ShareStatus, ShareTypes } from './share'
-
-export function getFileIcon(extension) {
-  const icon = fileIconMappings[extension.toLowerCase()]
-
-  if (icon) {
-    return `resource-type-${icon}`
-  }
-
-  return 'resource-type-file'
-}
-
-export function getFileIconColor(extension) {
-  const color = fileIconColorMappings[extension.toLowerCase()]
-
-  if (color) {
-    return color
-  }
-
-  return 'var(--oc-color-text-default)'
-}
 
 function _getFileExtension(name) {
   const extension = path.extname(name)
