@@ -168,10 +168,10 @@ export default {
         classes.push('oc-mt-s')
       }
       if (index < this.menuSections.length - 1) {
-        classes.push('oc-files-context-actions-border', 'oc-pb-s', 'oc-mb-s')
+        classes.push('oc-files-context-actions-border', 'oc-py-s', 'oc-mb-s')
       }
       if (index === this.menuSections.length - 1) {
-        classes.push('oc-mb-s')
+        classes.push('oc-py-s oc-mb-s')
       }
       return classes
     }
@@ -189,11 +189,12 @@ export default {
     a:hover,
     button,
     button:hover {
-      text-align: left;
       color: var(--oc-color-swatch-passive-default);
       display: inline-flex;
       gap: 10px;
+      justify-content: flex-start;
       vertical-align: top;
+      width: 100%;
     }
   }
 
